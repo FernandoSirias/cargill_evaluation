@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="cargill_evaluation" id="Project-c29" database="MySql" >
+	<schema name="cargill_evaluation" >
+		<table name="clients" >
+			<column name="client_id" type="int" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="clientname" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="address1" type="varchar" length="100" jt="12" />
+			<column name="address2" type="varchar" length="100" jt="12" />
+			<column name="town" type="varchar" length="100" jt="12" />
+			<column name="county" type="varchar" length="20" jt="12" />
+			<column name="postcode" type="varchar" length="20" jt="12" />
+			<column name="region" type="varchar" length="100" jt="12" />
+			<column name="outerpostode" type="varchar" length="2" jt="12" />
+			<column name="countryid" type="int" jt="4" mandatory="y" />
+			<column name="clienttype" type="varchar" length="20" jt="12" />
+			<column name="clientsize" type="varchar" length="20" jt="12" />
+			<column name="clientsince" type="timestamp" jt="93" />
+			<column name="iscreditworthy" type="binary" length="1" jt="-2" />
+			<column name="isdealer" type="boolean" jt="16" />
+			<index name="pk_clients_client_id" unique="PRIMARY_KEY" >
+				<column name="client_id" />
+			</index>
+			<fk name="fk_clients_invoices" to_schema="cargill_evaluation" to_table="invoices" >
+				<fk_column name="client_id" pk="clientid" />
+			</fk>
+			<fk name="fk_clients_countries" to_schema="cargill_evaluation" to_table="countries" >
+				<fk_column name="countryid" pk="countryid" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="colors" >
+			<column name="colorid" type="int" jt="4" mandatory="y" />
+			<column name="color" type="varchar" length="50" jt="12" />
+			<index name="pk_colors_colorid" unique="PRIMARY_KEY" >
+				<column name="colorid" />
+			</index>
+			<fk name="fk_colors_stock" to_schema="cargill_evaluation" to_table="stock" >
+				<fk_column name="colorid" pk="colorid" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="countries" >
+			<column name="countryid" type="int" length="2" jt="4" mandatory="y" />
+			<column name="countryname" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="countryisocode" type="char" length="3" jt="1" mandatory="y" />
+			<index name="pk_countries_countryid" unique="PRIMARY_KEY" >
+				<column name="countryid" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="invoicelines" >
+			<column name="invoicelineid" type="int" jt="4" mandatory="y" />
+			<column name="invoiceid" type="tinyint" jt="-6" mandatory="y" />
+			<column name="stockid" type="tinyint" jt="-6" mandatory="y" />
+			<column name="saleprice" type="int" jt="4" mandatory="y" />
+			<column name="lineitem" type="tinyint" jt="-6" mandatory="y" />
+			<index name="pk_invoicelines_invoicelineid" unique="PRIMARY_KEY" >
+				<column name="invoicelineid" />
+			</index>
+			<index name="unq_invoicelines_invoiceid" unique="UNIQUE_KEY" >
+				<column name="invoiceid" />
+			</index>
+			<index name="unq_invoicelines_stockid" unique="UNIQUE_KEY" >
+				<column name="stockid" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="invoices" >
+			<column name="invoiceid" type="int" jt="4" mandatory="y" />
+			<column name="invoicenumber" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="clientid" type="int" jt="4" mandatory="y" />
+			<column name="invoicedate" type="datetime" jt="93" mandatory="y" />
+			<column name="totaldiscount" type="int" jt="4" mandatory="y" />
+			<column name="deliverycharge" type="int" jt="4" mandatory="y" />
+			<column name="invoicedatekey" type="int" jt="4" mandatory="y" />
+			<index name="pk_invoices_invoiceid" unique="PRIMARY_KEY" >
+				<column name="invoiceid" />
+			</index>
+			<index name="unq_invoices_clientid" unique="UNIQUE_KEY" >
+				<column name="clientid" />
+			</index>
+			<fk name="fk_invoices_invoicelines" to_schema="cargill_evaluation" to_table="invoicelines" >
+				<fk_column name="invoiceid" pk="invoiceid" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="stock" >
+			<column name="stockid" type="int" jt="4" mandatory="y" />
+			<column name="make" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="model" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="colorid" type="int" jt="4" mandatory="y" />
+			<column name="vehicletype" type="varchar" length="50" jt="12" mandatory="y" />
+			<column name="costprice" type="int" jt="4" mandatory="y" />
+			<column name="spareparts" type="int" jt="4" mandatory="y" />
+			<column name="laborcost" type="int" jt="4" />
+			<column name="registration_date" type="date" jt="91" mandatory="y" />
+			<column name="mileage" type="int" jt="4" mandatory="y" />
+			<column name="purchasedate" type="date" jt="91" mandatory="y" />
+			<column name="vehicleageinyears" type="int" jt="4" mandatory="y" />
+			<index name="pk_stock_stockid" unique="PRIMARY_KEY" >
+				<column name="stockid" />
+			</index>
+			<index name="unq_stock_colorid" unique="UNIQUE_KEY" >
+				<column name="colorid" />
+			</index>
+			<fk name="fk_stock_invoicelines" to_schema="cargill_evaluation" to_table="invoicelines" >
+				<fk_column name="stockid" pk="stockid" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+	</schema>
+	<connector name="MyDb" database="MySql" host="localhost" port="3306" user="root" />
+	<layout name="Default Layout" id="Layout-4b7" show_relation="columns" >
+		<entity schema="cargill_evaluation" name="clients" color="C1D8EE" x="48" y="48" />
+		<entity schema="cargill_evaluation" name="colors" color="C1D8EE" x="336" y="304" />
+		<entity schema="cargill_evaluation" name="countries" color="C1D8EE" x="176" y="432" />
+		<entity schema="cargill_evaluation" name="invoicelines" color="C1D8EE" x="544" y="80" />
+		<entity schema="cargill_evaluation" name="invoices" color="C1D8EE" x="288" y="48" />
+		<entity schema="cargill_evaluation" name="stock" color="C1D8EE" x="512" y="288" />
+	</layout>
+</project>
